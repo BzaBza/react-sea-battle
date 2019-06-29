@@ -146,6 +146,7 @@ createShips(){
     { size: 2},
   ];
   this.props.onSetShips(fillRandom(createField(), ships).field)
+
 }
   render() {
     return (

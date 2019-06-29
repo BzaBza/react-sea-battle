@@ -1,29 +1,25 @@
+import { db } from "../base";
+
 export const setShips = (ships) => dispatch => {
   dispatch(
    {type: 'SET_SHIPS', payload: {ships}}
   );
+  setShipsInDb(ships);
 };
 
-// export const setSingleDeckShip = () => dispatch => {
-//   dispatch(
-//    {type: 'SET_SINGLE_DECKS_SHIP'}
-//   );
-// };
-//
-// export const setDoubleDeckShip = () => dispatch => {
-//   dispatch(
-//    {type: 'SET_DOUBLE_DECK_SHIP'}
-//   );
-// };
-//
-// export const setThreeDeckShip = () => dispatch => {
-//   dispatch(
-//    {type: 'SET_THREE_DECK_SHIP'}
-//   );
-// };
-//
-// export const setFourDeckShip = () => dispatch => {
-//   dispatch(
-//    {type: 'SET_FOUR_DECK_SHIP'}
-//   );
-// };
+
+function setShipsInDb(grid) {
+  let messageListRef = db.ref('session');
+  let newMessageRef = messageListRef.push();
+  let postId = newMessageRef.key;
+  console.log(postId, "posID!!!!!!!!!!!")
+  let ships = [];
+  for (let i = 0; i < grid.length; i++) {
+   for(let z = 0; z < grid[i].length; z++) {
+     if (grid[i][z].state === "ship") {
+        ships.push(grid[i][z])
+     }
+   }
+  }
+  newMessageRef.set({ships: ships});
+}

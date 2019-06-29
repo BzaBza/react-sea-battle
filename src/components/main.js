@@ -1,16 +1,18 @@
-import React from 'react';
+import React, {Component} from 'react';
 import GridContainer from "./grid/container";
 import SetShips from "./ships/shipsRender";
-import ShootGrid from "./grid/shootGrid";
+import ShotGrid from "./grid/shotGrid";
 
-function Main() {
-  return (
+class Main extends Component {
+  render() {
+    return (
      <div style={{display: "flex", justifyContent: "space-between"}}>
        <GridContainer/>
        <SetShips/>
-       <ShootGrid/>
+       <ShotGrid/>
      </div>
-  );
+    );
+  }
 }
 
 export default Main;
