@@ -8,11 +8,13 @@ class StartGame extends Component {
   }
 
   start() {
+    this.props.onChangeFlag(!this.props.flag)
     let userListRef = db.ref('session').child('users');
     let newUserRef = userListRef.push();
     let postId = newUserRef.key;
     newUserRef.set({ships: this.props.field});
-
+    newUserRef.update({shots: ""});
+    this.props.onFetchUserRef(postId);
     fetchOpponentsKey(postId, this.props);
 
 
@@ -45,15 +47,17 @@ class StartGame extends Component {
       });
     }
 
-    function fetchOpponentsShots() {
-
+    function fetchOpponentsShots(opponent,props) {
+      userListRef.child("" + opponent).child("shots").on('child_changed', function(childSnapshot, prevChildKey) {
+        console.log(childSnapshot, "childSnapshot", prevChildKey, "prevChildKey")
+      });
     }
   }
 
   render() {
     return (
      <div style={{width: "10%"}}>
-       <button onClick={() => {
+       <button disabled={this.props.flag} onClick={() => {
          this.start()
        }} style={{width: "100%"}}>START
        </button>

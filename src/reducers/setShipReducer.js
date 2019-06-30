@@ -1,6 +1,8 @@
 const initialState = {
   field: [],
   opponentsField: [],
+  userRef: null,
+  flag: false,
 };
 
 const setShipReducer = (state = initialState, action) => {
@@ -12,6 +14,10 @@ const setShipReducer = (state = initialState, action) => {
       };
     case "FETCH_OPPONENTS_DATA":
       return {...state, opponentsField: action.payload};
+    case "FETCH_USER_REF":
+      return {...state, userRef: action.payload};
+    case "GAMES_FLAG":
+      return {...state, flag: action.payload};
     default:
       return state
   }

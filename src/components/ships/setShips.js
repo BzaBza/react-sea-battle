@@ -158,7 +158,7 @@ createShips(){
   render() {
     return (
      <div style={{width: "10%"}}>
-       <button onClick={()=>{this.createShips()}} style={{width: "100%"}}>Set ships</button>
+       <button disabled={this.props.flag} onClick={()=>{this.createShips()}} style={{width: "100%"}}>Set ships</button>
      </div>
     );
   }

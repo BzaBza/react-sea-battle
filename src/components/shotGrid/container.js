@@ -6,7 +6,8 @@ const mapStateToProps = state => {
   return {
     field: state.setShipReducer.field,
     opponentsField: state.setShipReducer.opponentsField,
-    shots: state.shotReducer.shots
+    shots: state.shotReducer.shots,
+    userRef: state.setShipReducer.userRef,
   }
 };
 const mapDispatchToProps = dispatch => {

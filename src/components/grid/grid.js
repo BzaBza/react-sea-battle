@@ -23,7 +23,7 @@ class Grid extends Component {
               {numbers.map((number) =>
                <div style={style.cell} >
                  {this.props.field.map((ship)=> ship.x === number1 && ship.y === number ?
-                  <Cell><p>[   ]</p></Cell>  : null)}
+                  <Cell><p>[ ]</p></Cell>  : null)}
                </div>
               )}
             </div>
@@ -49,6 +49,8 @@ const style = {
     border: "1px solid black",
     width: "100%",
     height: "3em",
+    display: "flex",
+    justifyContent: "center"
   },
 };
 

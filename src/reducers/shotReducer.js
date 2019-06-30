@@ -1,5 +1,5 @@
 const initialState = {
-  shots: [{row: null, cell: null}],
+  shots: [{x: null, y: null}],
 };
 
 const shotReducer = (state = initialState, action) => {

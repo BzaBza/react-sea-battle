@@ -5,6 +5,7 @@ import { setShips } from "../../actions/setShip";
 const mapStateToProps = state => {
   return {
     field: state.setShipReducer.field,
+    flag: state.setShipReducer.flag,
   }
 };
 const mapDispatchToProps = dispatch => {
