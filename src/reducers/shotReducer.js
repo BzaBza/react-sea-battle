@@ -1,12 +1,15 @@
 const initialState = {
-  shots: [],
+  shots: [{row: null, cell: null}],
 };
 
 const shotReducer = (state = initialState, action) => {
   if (action.type === 'SHOT_IN_FIELD') {
     return {
       ...state,
-      // shots: state.shots.push(action.payload),
+      shots: [
+        ...state.shots,
+        action.payload
+      ]
     };
   } else {
     return state

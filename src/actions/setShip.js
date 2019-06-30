@@ -5,7 +5,6 @@ export const setShips = (field) => dispatch => {
 };
 
 export const startGame = (shipsCells) => dispatch => {
-  console.log(shipsCells, "SHIIIIIIIIIPS")
   dispatch(
    {type: "FETCH_OPPONENTS_DATA", payload: shipsCells},
   )

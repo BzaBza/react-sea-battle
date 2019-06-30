@@ -6,8 +6,11 @@ class ShotGrid extends Component {
     this.shot = this.shot.bind(this);
   }
   shot(row, cell){
-    this.props.onShot({row: row, cell: cell})
-    console.log(this.props.shots)
+    let shots = this.props.shots;
+    if (!shots.some(e => e.row === row && e.cell === cell)) {
+      this.props.onShot({row: row, cell: cell})
+    }
+    console.log(shots)
   }
   render() {
     const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -29,11 +32,11 @@ class ShotGrid extends Component {
             <div style={{display: "flex"}}>
               {numbers.map((number) =>
                <div style={style.cell} onClick={()=>{this.shot(number1, number)}}>
-                 {/*{this.props.opponentsField ? this.props.opponentsField.map((ship)=> ship.x === number1 && ship.y === number ?*/}
-                 {/* this.props.shots.map((shot)=>*/}
-                 {/*   shot.row === number1 && shot.cell === number ? <p>X</p> : null*/}
-                 {/* )*/}
-                 {/* : null): null}*/}
+                 {this.props.opponentsField ? this.props.opponentsField.map((ship)=> ship.x === number1 && ship.y === number ?
+                  this.props.shots.map((shot)=>
+                    shot.row === number1 && shot.cell === number ? <p>X</p> : null
+                  )
+                  : null): null}
                </div>
               )}
             </div>
