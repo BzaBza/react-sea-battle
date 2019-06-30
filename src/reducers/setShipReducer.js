@@ -1,16 +1,19 @@
 const initialState = {
-  ships: [],
+  field: [],
+  opponentsField: [],
 };
 
 const setShipReducer = (state = initialState, action) => {
-
-  if (action.type === "SET_SHIPS") {
-    return {
-      ...state,
-      ships: action.payload.ships,
-    };
-  } else {
-    return state
+  switch (action.type) {
+    case "SET_SHIPS":
+      return {
+        ...state,
+        field: action.payload.field,
+      };
+    case "FETCH_OPPONENTS_DATA":
+      return {...state, opponentsField: action.payload};
+    default:
+      return state
   }
 };
 

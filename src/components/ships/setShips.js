@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from "react-redux";
-import {setShips} from '../../actions/setShip'
 
 class SetShips extends Component {
   constructor(props) {
@@ -145,20 +143,25 @@ createShips(){
     { size: 2},
     { size: 2},
   ];
-  this.props.onSetShips(fillRandom(createField(), ships).field)
-
+  let field = fillRandom(createField(), ships).field;
+  let shipsCells = [];
+  for (let i = 0; i < field.length; i++) {
+    for(let z = 0; z < field[i].length; z++) {
+      if (field[i][z].state === "ship") {
+        shipsCells.push(field[i][z])
+      }
+    }
+  }
+  console.log(shipsCells, "shipsCells")
+  this.props.onSetShips(shipsCells)
 }
   render() {
     return (
-      <button onClick={()=>{this.createShips()}}>Set ships</button>
+     <div style={{width: "10%"}}>
+       <button onClick={()=>{this.createShips()}} style={{width: "100%"}}>Set ships</button>
+     </div>
     );
   }
 }
 
-export default connect(
- state => ({}),
- dispatch => ({
-   onSetShips: (ships) => {
-     dispatch(setShips(ships))
-   },
- }))(SetShips);
+export default SetShips;

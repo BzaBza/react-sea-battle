@@ -1,9 +1,9 @@
 import {connect} from 'react-redux'
-import Grid from './grid'
+import Grid from '../grid/grid'
 
 const mapStateToProps = state => {
   return {
-    ships: state.setShipReducer.ships,
+    field: state.setShipReducer.field,
   }
 };
 const mapDispatchToProps = dispatch => {

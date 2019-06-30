@@ -22,8 +22,8 @@ class Grid extends Component {
             <div style={{display: "flex"}}>
               {numbers.map((number) =>
                <div style={style.cell} >
-                 {this.props.ships.map((row) => row.map((ship)=> ship.state === "ship" ? ship.x === number1 && ship.y === number ?
-                  <Cell><p>[   ]</p></Cell>  : null : null))}
+                 {this.props.field.map((ship)=> ship.x === number1 && ship.y === number ?
+                  <Cell><p>[   ]</p></Cell>  : null)}
                </div>
               )}
             </div>
