@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 class Grid extends Component {
   render() {
     const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    let rendered = [];
     return (
      <div style={style.main}>
        <div style={{marginTop: "calc(3em + 2px)", width: "calc(100% / 11)"}}>
@@ -27,19 +26,7 @@ class Grid extends Component {
                     <div style={{width: "100%", backgroundColor: "#000", display: "flex", justifyContent: "center"}}>
                       {this.props.opponentsShots.map((ship) => ship.x === number1 && ship.y === number ?
                        <p style={{color: "#fff"}}>X</p> : null)}
-                    </div> : rendered.map((cell) => cell.x === number1 && cell.y === number ? null :
-                     () => {
-                       this.props.opponentsShots.map((ship) => ship.x === number1 && ship.y === number ?
-                        <div>[X]</div> : null);
-
-                       rendered.push({
-                         x: number1,
-                         y: number
-                       });
-                     }
-                    )
-                   )
-                 }
+                    </div> : null)}
 
                  {
                    this.props.opponentsShots.map((ship) => ship.x === number1 && ship.y === number ?

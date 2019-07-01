@@ -5,7 +5,8 @@ class SetShips extends Component {
     super(props);
     this.createShips = this.createShips.bind(this);
   }
-createShips(){
+
+  createShips(){
   function random (max, min = 0) {
     return Math.floor(Math.random() * (max - min) + min);
   }

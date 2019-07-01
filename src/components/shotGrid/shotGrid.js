@@ -11,35 +11,77 @@ class ShotGrid extends Component {
   }
 
   shot(x, y) {
-    let shots = this.props.shots;
-    if (!shots.some(e => e.x === x && e.y === y)) {
-      this.props.onShot({x: x, y: y})
-    }
-    db.ref(`session/open`).once('value', (snapshot) => {
-      let currentGameId = Object.keys(snapshot.val())[0];
-      db.ref(`session/open/${currentGameId}/users/${this.props.userRef}/shots`).push().set({x: x, y: y});
+    console.log(this.props.opponentsShots, "this.props.opponentsShots")
+    if (this.props.opponentsShots === undefined) return
+    let ships = this.props.field.map((item) => {
+      return {x: item.x, y: item.y}
     });
 
-    let data = [];
-    let ships = [];
+    let opponentsShots = ships.some((item) =>
+     this.props.opponentsShots.length > 0 && item.x === this.props.opponentsShots[this.props.opponentsShots.length - 1].x
+     && item.y === this.props.opponentsShots[this.props.opponentsShots.length - 1].y
+    );
 
-    for (let i = 0; i <= this.props.opponentsField.length; i++) {
-      if (this.props.opponentsField[i] !== undefined) {
-        ships.push({x: this.props.opponentsField[i].x, y: this.props.opponentsField[i].y});
-      }
-      // console.log(ships, "ships")
+    let myShots = this.props.opponentsField.some((item) =>
+     item.x === this.props.shots[this.props.shots.length - 1].x &&
+     item.y === this.props.shots[this.props.shots.length - 1].y
+    );
 
-      // data.push(shots.filter(elem => elem === ships[i]));
+    console.log(myShots, "myShotsmyShotsmyShots");
+
+    if (this.props.opponentsShots.length === 0 && this.props.shots.length === 1) {
+      console.log("NA$ALO")
+      onShot(this.props)
+      return;
+      // if( this.props.shots.length === 1) {
+      //   onShot(this.props)
+      // }
     }
-    data.push(ships);
-    console.log(ships, "ships")
-    console.log(shots, "shots")
-    console.log(data, "data")
-    // if(data === this.props.opponentsField){
-    //   console.log(shots,"data",this.props.opponentsField,"this.props.opponentsField", "YES")
-    // }else{
-    //   console.log(shots,"data",this.props.opponentsField,"this.props.opponentsField", "NO")
-    // }
+    if (myShots) {
+      console.log("myShots");
+      onShot(this.props)
+      return;
+    }
+    if (this.props.opponentsShots.length > 0 && !opponentsShots) {
+      console.log("opponents shots");
+      onShot(this.props)
+      return;
+    }
+    // else if(this.props.shots.length > 1 && myShots) {
+    //   onShot(this.props)
+    // }else if (this.props.opponentsShots && !opponentsShots) {
+    //   onShot(this.props)
+    // }else onShot(this.props);
+
+
+    function onShot(props) {
+      let shots = props.shots;
+      if (!shots.some(e => e.x === x && e.y === y)) {
+        props.onShot({x: x, y: y})
+      }
+      db.ref(`session/open`).once('value', (snapshot) => {
+        let currentGameId = Object.keys(snapshot.val())[0];
+        db.ref(`session/open/${currentGameId}/users/${props.userRef}/shots`).push().set({x: x, y: y});
+      });
+
+      // let data = [];
+      // let ships = [];
+      //
+      // for (let i = 0; i <= this.props.opponentsField.length; i++) {
+      //   if (this.props.opponentsField[i] !== undefined) {
+      //     ships.push({x: this.props.opponentsField[i].x, y: this.props.opponentsField[i].y});
+      //   }
+      //   // console.log(ships, "ships")
+      //
+      //   // data.push(shots.filter(elem => elem === ships[i]));
+      // }
+      // data.push(ships);
+      // // if(data === this.props.opponentsField){
+      // //   console.log(shots,"data",this.props.opponentsField,"this.props.opponentsField", "YES")
+      // // }else{
+      // //   console.log(shots,"data",this.props.opponentsField,"this.props.opponentsField", "NO")
+      // // }
+    }
 
   }
 

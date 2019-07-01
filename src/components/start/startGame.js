@@ -66,7 +66,7 @@ class StartGame extends Component {
 
     function fetchOpponentsShots(opponent, usersRef, props) {
       usersRef.child(`${opponent}/shots`).on('value', function (snapshot) {
-        console.log(Object.values(snapshot.val()), "snapshot.val()");
+        // console.log(Object.values(snapshot.val()), "snapshot.val()");
         props.onFetchOpponentsShots(Object.values(snapshot.val()))
       });
     }

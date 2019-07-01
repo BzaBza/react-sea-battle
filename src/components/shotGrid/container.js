@@ -8,6 +8,7 @@ const mapStateToProps = state => {
     opponentsField: state.setShipReducer.opponentsField,
     shots: state.shotReducer.shots,
     userRef: state.setShipReducer.userRef,
+    opponentsShots: state.shotReducer.opponentsShots,
   }
 };
 const mapDispatchToProps = dispatch => {
