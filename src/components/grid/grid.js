@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import Cell from "./cell";
 
 class Grid extends Component {
   render() {
     const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let rendered = [];
     return (
      <div style={style.main}>
        <div style={{marginTop: "calc(3em + 2px)", width: "calc(100% / 11)"}}>
@@ -21,9 +21,30 @@ class Grid extends Component {
           <div style={style.row}>
             <div style={{display: "flex"}}>
               {numbers.map((number) =>
-               <div style={style.cell} >
-                 {this.props.field.map((ship)=> ship.x === number1 && ship.y === number ?
-                  <Cell><p>[ ]</p></Cell>  : null)}
+               <div style={style.cell}>
+                 {
+                   this.props.field.map((ship) => ship.x === number1 && ship.y === number ?
+                    <div style={{width: "100%", backgroundColor: "#000", display: "flex", justifyContent: "center"}}>
+                      {this.props.opponentsShots.map((ship) => ship.x === number1 && ship.y === number ?
+                       <p style={{color: "#fff"}}>X</p> : null)}
+                    </div> : rendered.map((cell) => cell.x === number1 && cell.y === number ? null :
+                     () => {
+                       this.props.opponentsShots.map((ship) => ship.x === number1 && ship.y === number ?
+                        <div>[X]</div> : null);
+
+                       rendered.push({
+                         x: number1,
+                         y: number
+                       });
+                     }
+                    )
+                   )
+                 }
+
+                 {
+                   this.props.opponentsShots.map((ship) => ship.x === number1 && ship.y === number ?
+                    <div style={{position: "absolute"}}>*</div> : null)
+                 }
                </div>
               )}
             </div>

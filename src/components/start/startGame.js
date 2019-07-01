@@ -51,7 +51,7 @@ class StartGame extends Component {
           fetchOpponentsKey(postId, props, usersRef, currentGameId);
         } else {
           fetchOpponentsShips(opponent, props, usersRef);
-          fetchOpponentsShots(opponent, usersRef);
+          fetchOpponentsShots(opponent, usersRef, props);
         }
       });
     }
@@ -64,9 +64,10 @@ class StartGame extends Component {
       });
     }
 
-    function fetchOpponentsShots(opponent, usersRef) {
-      usersRef.child(`${opponent}/shots`).on('child_changed', function (childSnapshot, prevChildKey) {
-        console.log(childSnapshot, "childSnapshot", prevChildKey, "prevChildKey")
+    function fetchOpponentsShots(opponent, usersRef, props) {
+      usersRef.child(`${opponent}/shots`).on('value', function (snapshot) {
+        console.log(Object.values(snapshot.val()), "snapshot.val()");
+        props.onFetchOpponentsShots(Object.values(snapshot.val()))
       });
     }
   }

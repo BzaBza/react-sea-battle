@@ -1,6 +1,7 @@
 import {connect} from 'react-redux'
 import StartGame from './startGame'
 import {startGame, fetchUserRef, gamesFlag} from "../../actions/setShip";
+import {fetchOpponentsShots} from "../../actions/shot";
 
 const mapStateToProps = state => {
   return {
@@ -19,6 +20,9 @@ const mapDispatchToProps = dispatch => {
     },
     onChangeFlag: (flag) => {
       dispatch(gamesFlag(flag))
+    },
+    onFetchOpponentsShots: (field) => {
+      dispatch(fetchOpponentsShots(field))
     }
   }
 };

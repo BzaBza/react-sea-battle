@@ -4,6 +4,7 @@ import Grid from '../grid/grid'
 const mapStateToProps = state => {
   return {
     field: state.setShipReducer.field,
+    opponentsShots: state.shotReducer.opponentsShots,
   }
 };
 const mapDispatchToProps = dispatch => {

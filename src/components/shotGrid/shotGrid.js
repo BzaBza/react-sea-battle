@@ -41,12 +41,6 @@ class ShotGrid extends Component {
     //   console.log(shots,"data",this.props.opponentsField,"this.props.opponentsField", "NO")
     // }
 
-    // if(this.state.i > 0){
-    //   setTimeout(()=>{setData(this.props)}, 3000)
-    // }else{
-    //   this.setState({i: this.state.i + 1});
-    //   setData(this.props)
-    // }
   }
 
   render() {
