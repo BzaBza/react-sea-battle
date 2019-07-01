@@ -5,53 +5,74 @@ class StartGame extends Component {
   constructor(props) {
     super(props);
     this.start = this.start.bind(this);
+    StartGame.finish = StartGame.finish.bind(this);
   }
 
   start() {
-    this.props.onChangeFlag(!this.props.flag)
-    let userListRef = db.ref('session').child('users');
-    let newUserRef = userListRef.push();
-    let postId = newUserRef.key;
-    newUserRef.set({ships: this.props.field});
-    newUserRef.update({shots: ""});
-    this.props.onFetchUserRef(postId);
-    fetchOpponentsKey(postId, this.props);
+    function initGame(currentGameId, props) {
+      let usersRef = db.ref(`session/open/${currentGameId}/users`);
+      usersRef.once('value', (snapshot) => {
+        if (snapshot.val() === undefined || snapshot.val() === null || Object.keys(snapshot.val()).length < 2) {
+          let newUser = usersRef.push();
+          let postId = newUser.key;
+          usersRef.child(`${postId}`).set({ships: props.field});
+          usersRef.child(`${postId}`).update({shots: ""});
+          props.onFetchUserRef(postId);
+          fetchOpponentsKey(postId, props, usersRef, currentGameId);
+        }
+      });
+    }
 
+    this.props.onChangeFlag(!this.props.flag);
 
-    function fetchOpponentsKey(postId, props) {
-      db.ref('session').once('value').then((snapshot) => {
+    db.ref('session/open').once('value', (snapshot) => {
+      if (snapshot.exists()) {
+        let currentGameId = Object.keys(snapshot.val())[0];
+        initGame(currentGameId, this.props);
+      } else {
+        let newGame = db.ref(`session/open`).push();
+        let currentGameId = newGame.key;
+        initGame(currentGameId, this.props)
+      }
+    });
+
+    function fetchOpponentsKey(postId, props, usersRef, currentGameId) {
+      db.ref(`session/open/${currentGameId}/users`).once('value').then((snapshot) => {
         let allUsers;
         let opponent;
 
-        allUsers = (snapshot.val()).users || 'Anonymous';
+        allUsers = (snapshot.val()) || 'Anonymous';
         for (let user in allUsers) {
           if (user !== postId) {
             opponent = user;
           }
         }
         if (opponent === undefined) {
-          fetchOpponentsKey(postId, props);
+          fetchOpponentsKey(postId, props, usersRef, currentGameId);
         } else {
-          fetchOpponentsShips(opponent, props);
-          fetchOpponentsShots(opponent, props);
+          fetchOpponentsShips(opponent, props, usersRef);
+          fetchOpponentsShots(opponent, usersRef);
         }
       });
     }
 
-    function fetchOpponentsShips(opponentsKey, props) {
-      db.ref("session").child("users").child("" + opponentsKey).once('value').then(function (snapshot) {
-        if(snapshot.val().ships !== undefined){
-          // console.log(snapshot.val().ships)
+    function fetchOpponentsShips(opponentsKey, props, usersRef) {
+      usersRef.child(`${opponentsKey}`).once('value').then(function (snapshot) {
+        if (snapshot.val().ships !== undefined) {
           props.onStartGame(snapshot.val().ships)
         }
       });
     }
 
-    function fetchOpponentsShots(opponent,props) {
-      userListRef.child("" + opponent).child("shots").on('child_changed', function(childSnapshot, prevChildKey) {
+    function fetchOpponentsShots(opponent, usersRef) {
+      usersRef.child(`${opponent}/shots`).on('child_changed', function (childSnapshot, prevChildKey) {
         console.log(childSnapshot, "childSnapshot", prevChildKey, "prevChildKey")
       });
     }
+  }
+
+  static finish() {
+    db.ref(`session/open`).remove();
   }
 
   render() {
@@ -60,6 +81,10 @@ class StartGame extends Component {
        <button disabled={this.props.flag} onClick={() => {
          this.start()
        }} style={{width: "100%"}}>START
+       </button>
+       <button onClick={() => {
+         StartGame.finish()
+       }} style={{width: "100%"}}>FINISH
        </button>
      </div>
     );

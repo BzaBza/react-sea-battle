@@ -4,27 +4,28 @@ import {db} from "../../base";
 class ShotGrid extends Component {
   constructor(props) {
     super(props);
-    this.state ={
+    this.state = {
       i: 0
     };
     this.shot = this.shot.bind(this);
   }
-  shot(x, y){
-    let shots = this.props.shots;
-      if (!shots.some(e => e.x === x && e.y === y)) {
-        this.props.onShot({x: x, y: y})
-      }
-      let userListRef = db.ref('session').child('users').child("" + this.props.userRef).child("shots");
-      userListRef.push().set({x: x, y: y});
 
-    // setTimeout(()=>{}, 3000);
+  shot(x, y) {
+    let shots = this.props.shots;
+    if (!shots.some(e => e.x === x && e.y === y)) {
+      this.props.onShot({x: x, y: y})
+    }
+    db.ref(`session/open`).once('value', (snapshot) => {
+      let currentGameId = Object.keys(snapshot.val())[0];
+      db.ref(`session/open/${currentGameId}/users/${this.props.userRef}/shots`).push().set({x: x, y: y});
+    });
 
     let data = [];
     let ships = [];
 
-    for(let i = 0; i <= this.props.opponentsField.length; i++) {
-      if(this.props.opponentsField[i] !== undefined){
-        ships.push({x: this.props.opponentsField[i].x, y:this.props.opponentsField[i].y});
+    for (let i = 0; i <= this.props.opponentsField.length; i++) {
+      if (this.props.opponentsField[i] !== undefined) {
+        ships.push({x: this.props.opponentsField[i].x, y: this.props.opponentsField[i].y});
       }
       // console.log(ships, "ships")
 
@@ -34,11 +35,11 @@ class ShotGrid extends Component {
     console.log(ships, "ships")
     console.log(shots, "shots")
     console.log(data, "data")
-      // if(data === this.props.opponentsField){
-      //   console.log(shots,"data",this.props.opponentsField,"this.props.opponentsField", "YES")
-      // }else{
-      //   console.log(shots,"data",this.props.opponentsField,"this.props.opponentsField", "NO")
-      // }
+    // if(data === this.props.opponentsField){
+    //   console.log(shots,"data",this.props.opponentsField,"this.props.opponentsField", "YES")
+    // }else{
+    //   console.log(shots,"data",this.props.opponentsField,"this.props.opponentsField", "NO")
+    // }
 
     // if(this.state.i > 0){
     //   setTimeout(()=>{setData(this.props)}, 3000)
@@ -67,19 +68,22 @@ class ShotGrid extends Component {
           <div style={style.row}>
             <div style={{display: "flex"}}>
               {numbers.map((number) =>
-               <div aria-disabled={true} style={style.cell} onClick={()=>{this.shot(number1, number)}}>
-                <div  style={{display:  "flex",  justifyContent: "center", alignItems: "center"}}>
-                  {
-                    this.props.opponentsField.map((ship)=> ship.x === number1 && ship.y === number ?
-                   this.props.shots.map((shot)=>
-                    shot.x === number1 && shot.y === number ? <div>SH</div> : null
-                   )
-                   : null)
-                  }
-                  {
-                    this.props.shots.map((shot)=>
-                     shot.x === number1 && shot.y === number ?  <div>[X]</div>  : null
-                    )}
+               <div aria-disabled={true} style={style.cell} onClick={() => {
+                 this.shot(number1, number)
+               }}>
+                 <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                   {
+                     this.props.opponentsField.map((ship) => ship.x === number1 && ship.y === number ?
+                      this.props.shots.map((shot) =>
+                       shot.x === number1 && shot.y === number ? <div>SH</div> : null
+                      )
+                      : null)
+                   }
+                   {
+                     this.props.shots.map((shot) =>
+                      shot.x === number1 && shot.y === number ? <div>[X]</div> : null
+                     )
+                   }
                  </div>
                </div>
               )}
